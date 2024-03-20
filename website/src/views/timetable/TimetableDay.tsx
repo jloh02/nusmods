@@ -74,7 +74,7 @@ const TimetableDay: React.FC<Props> = (props) => {
         <span className={styles.dayNameText}>{props.day.substring(0, 3)}</span>
       </div>
       <div className={styles.dayRows} style={rowStyle}>
-        <CurrentTimeIndicator style={props.currentTimeIndicatorStyle} />
+        <CurrentTimeIndicator style={{ ...props.currentTimeIndicatorStyle, display: 'none' }} />
 
         {props.dayLessonRows.map((dayLessonRow, i) => (
           <TimetableRow
