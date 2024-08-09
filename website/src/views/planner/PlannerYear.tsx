@@ -20,6 +20,7 @@ type Props = Readonly<{
   removeModule: (id: string) => void;
   addCustomData: (moduleCode: ModuleCode) => void;
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
+  addModuleToTimetable: (semester: Semester, module: ModuleCode) => void;
 }>;
 
 type State = {
@@ -50,7 +51,7 @@ export default class PlannerYear extends PureComponent<Props, State> {
         </h2>
         <div className={styles.yearMeta}>
           <p>
-            {count} {count === 1 ? 'course' : 'courses'}
+            {count} {count === 1 ? 'Course' : 'Courses'}
           </p>
           <p>{renderMCs(credits)}</p>
         </div>
@@ -92,6 +93,7 @@ export default class PlannerYear extends PureComponent<Props, State> {
                 removeModule={this.props.removeModule}
                 addCustomData={this.props.addCustomData}
                 setPlaceholderModule={this.props.setPlaceholderModule}
+                addModuleToTimetable={this.props.addModuleToTimetable}
               />
             </div>
           ))}
