@@ -84,7 +84,7 @@ class Timetable extends React.PureComponent<Props, State> {
 
     const tmpLessons: TimetableArrangement = this.addCustomLesson(this.props.lessons, [
       [
-        'Tuesday',
+        'Monday',
         {
           classNo: 'Unofficial IG',
           startTime: '1700',
