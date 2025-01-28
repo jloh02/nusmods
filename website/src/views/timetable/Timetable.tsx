@@ -66,17 +66,20 @@ class Timetable extends React.PureComponent<Props, State> {
 
   addCustomLesson = (
     current: TimetableArrangement,
-    customLesson: [day: string, lesson: Omit<ModifiableLesson, 'day'>][],
+    customLesson: [day: string, lesson: Omit<ModifiableLesson, 'day'>, row?: number][],
   ) => {
     let result = { ...current };
-    customLesson.forEach(([day, lesson]) => {
-      result = {
-        ...result,
-        [day]: [
-          (result[day] || [[]])[0].concat([{ ...lesson, day }]),
-          ...(result[day] || []).slice(1),
-        ],
-      };
+    customLesson.forEach(([day, lesson, row]) => {
+      const rows = row ?? 0;
+      while (result[day]?.length < rows + 1) {
+        result[day] = result[day]?.concat([[]]);
+      }
+      result[day] = (result[day] || [[]]).map((row, index) => {
+        if (index === rows) {
+          return row.concat({ ...lesson, day });
+        }
+        return row;
+      });
     });
     return result;
   };
@@ -85,19 +88,35 @@ class Timetable extends React.PureComponent<Props, State> {
     const { highlightPeriod } = this.props;
 
     const tmpLessons: TimetableArrangement = this.addCustomLesson(this.props.lessons, [
+      // [
+      //   'Monday',
+      //   {
+      //     classNo: 'Unofficial IG',
+      //     startTime: '1700',
+      //     endTime: '1900',
+      //     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      //     venue: 'Yale Field',
+      //     lessonType: '',
+      //     moduleCode: 'Frisbee',
+      //     title: '',
+      //     colorIndex: -1,
+      //   },
+      //   1,
+      // ],
       [
-        'Monday',
+        'Thursday',
         {
-          classNo: 'Unofficial IG',
-          startTime: '1700',
-          endTime: '1900',
+          classNo: 'HackerSchool',
+          startTime: '1800',
+          endTime: '2100',
           weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'Yale Field',
+          venue: 'COM3 SR11',
           lessonType: '',
-          moduleCode: 'Frisbee',
+          moduleCode: 'NUS Hackers',
           title: '',
           colorIndex: -1,
         },
+        1,
       ],
       [
         'Wednesday',
@@ -106,7 +125,7 @@ class Timetable extends React.PureComponent<Props, State> {
           startTime: '2200',
           endTime: '2359',
           weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'MPSH',
+          venue: 'CAPT MPSH',
           lessonType: '',
           moduleCode: 'Frisbee',
           title: '',
@@ -120,7 +139,7 @@ class Timetable extends React.PureComponent<Props, State> {
           startTime: '2030',
           endTime: '2200',
           weeks: [2, 4, 6, 8, 10, 12],
-          venue: 'SR',
+          venue: 'CAPT SR6',
           lessonType: '',
           moduleCode: 'CSC Pubs',
           title: '',
@@ -134,41 +153,41 @@ class Timetable extends React.PureComponent<Props, State> {
           startTime: '1900',
           endTime: '2100',
           weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'COM',
+          venue: 'COM3-B1-10 SR91 (ALC)',
           lessonType: '',
-          moduleCode: 'Greyhats',
+          moduleCode: 'NUS Greyhats',
           title: '',
           colorIndex: -1,
         },
       ],
-      [
-        'Thursday',
-        {
-          classNo: '02',
-          startTime: '1000',
-          endTime: '1100',
-          weeks: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'COM1-0113',
-          lessonType: 'Tutorial',
-          moduleCode: 'CS2100 TA',
-          title: '',
-          colorIndex: 6,
-        },
-      ],
-      [
-        'Thursday',
-        {
-          classNo: '03',
-          startTime: '1100',
-          endTime: '1200',
-          weeks: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'COM1-0113',
-          lessonType: 'Tutorial',
-          moduleCode: 'CS2100 TA',
-          title: '',
-          colorIndex: 6,
-        },
-      ],
+      // [
+      //   'Thursday',
+      //   {
+      //     classNo: '02',
+      //     startTime: '1000',
+      //     endTime: '1100',
+      //     weeks: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      //     venue: 'COM1-0113',
+      //     lessonType: 'Tutorial',
+      //     moduleCode: 'CS2100 TA',
+      //     title: '',
+      //     colorIndex: 6,
+      //   },
+      // ],
+      // [
+      //   'Thursday',
+      //   {
+      //     classNo: '03',
+      //     startTime: '1100',
+      //     endTime: '1200',
+      //     weeks: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      //     venue: 'COM1-0113',
+      //     lessonType: 'Tutorial',
+      //     moduleCode: 'CS2100 TA',
+      //     title: '',
+      //     colorIndex: 6,
+      //   },
+      // ],
       [
         'Thursday',
         {
@@ -176,28 +195,30 @@ class Timetable extends React.PureComponent<Props, State> {
           startTime: '2200',
           endTime: '2359',
           weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'L8 Lounge',
+          venue: 'CAPT L8 Lounge',
           lessonType: '',
           moduleCode: 'DFC',
           title: '',
           colorIndex: -1,
         },
       ],
-      [
-        'Wednesday',
-        {
-          classNo: 'Office Hours',
-          startTime: '1400',
-          endTime: '1600',
-          weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-          venue: 'COM',
-          lessonType: '',
-          moduleCode: 'NUSMods',
-          title: '',
-          colorIndex: -1,
-        },
-      ],
+      // [
+      //   'Wednesday',
+      //   {
+      //     classNo: 'Office Hours',
+      //     startTime: '1400',
+      //     endTime: '1600',
+      //     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      //     venue: 'COM',
+      //     lessonType: '',
+      //     moduleCode: 'NUSMods',
+      //     title: '',
+      //     colorIndex: -1,
+      //   },
+      // ],
     ]);
+
+    console.log(tmpLessons);
 
     const schoolDays = SCHOOLDAYS.filter((day) => day !== 'Saturday' || tmpLessons.Saturday);
 
